@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,11 +28,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onViewDetails, onAddToC
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
-          <div>
+          <div className="flex-grow pr-2">
             <p className="text-sm text-muted-foreground font-medium">{course.code}</p>
-            <CardTitle className="text-lg mt-1">{course.name}</CardTitle>
+            <CardTitle className="text-lg mt-1 line-clamp-2">{course.name}</CardTitle>
           </div>
-          <Badge variant={course.mode === "Online" ? "outline" : "default"} className="ml-2">
+          <Badge variant={course.mode === "Online" ? "outline" : "default"} className="ml-2 shrink-0">
             {course.mode}
           </Badge>
         </div>
@@ -91,10 +90,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onViewDetails, onAddToC
       </CardContent>
       
       <CardFooter className="flex gap-2 pt-3 border-t">
-        <Button variant="outline" className="flex-1" onClick={() => onViewDetails(course)}>
+        <Button variant="outline" className="flex-1 truncate" onClick={() => onViewDetails(course)}>
           View Details
         </Button>
-        <Button className="flex-1" onClick={() => onAddToCart(course)}>
+        <Button className="flex-1 whitespace-nowrap" onClick={() => onAddToCart(course)}>
           Add to Cart
         </Button>
       </CardFooter>
