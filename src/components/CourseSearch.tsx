@@ -10,15 +10,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Search, Filter, X } from "lucide-react";
+import { Search, Filter, X, LayoutGrid, List } from "lucide-react";
 import { Course, departments, professors } from "@/data/mockData";
+import { Separator } from "@/components/ui/separator";
 
 interface CourseSearchProps {
   courses: Course[];
   onSearch: (results: Course[]) => void;
+  onViewChange?: (view: 'card' | 'table') => void;
+  currentView?: 'card' | 'table';
 }
 
-const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onSearch }) => {
+const CourseSearch: React.FC<CourseSearchProps> = ({ 
+  courses, 
+  onSearch, 
+  onViewChange, 
+  currentView = 'card' 
+}) => {
   // Filter states
   const [term, setTerm] = useState<string>("");
   const [level, setLevel] = useState<string>("");
@@ -116,18 +124,71 @@ const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onSearch }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-4">
       <div className="flex flex-col gap-4">
-        {/* Main search bar */}
-        <div className="relative">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search courses by name or keywords..."
-            className="pl-10"
-            value={keywords}
-            onChange={(e) => setKeywords(e.target.value)}
-          />
+        {/* Top row with main filters and view toggle */}
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Search bar */}
+          <div className="relative flex-grow">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search courses by name or keywords..."
+              className="pl-10"
+              value={keywords}
+              onChange={(e) => setKeywords(e.target.value)}
+            />
+          </div>
+          
+          {/* Common filters */}
+          <div className="flex gap-2">
+            <Select value={term} onValueChange={setTerm}>
+              <SelectTrigger className="w-[130px]">
+                <SelectValue placeholder="Term" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Any Term</SelectItem>
+                <SelectItem value="Fall">Fall</SelectItem>
+                <SelectItem value="Spring">Spring</SelectItem>
+                <SelectItem value="Summer">Summer</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <Select value={department} onValueChange={setDepartment}>
+              <SelectTrigger className="w-[130px]">
+                <SelectValue placeholder="Department" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Any Department</SelectItem>
+                {departments.map((dept) => (
+                  <SelectItem key={dept.id} value={dept.code}>
+                    {dept.code}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {onViewChange && (
+              <div className="flex border rounded-md overflow-hidden">
+                <Button
+                  variant={currentView === 'card' ? 'default' : 'ghost'}
+                  size="icon"
+                  onClick={() => onViewChange('card')}
+                  className="rounded-none"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={currentView === 'table' ? 'default' : 'ghost'}
+                  size="icon"
+                  onClick={() => onViewChange('table')}
+                  className="rounded-none"
+                >
+                  <List className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Toggle filters button */}
+        {/* Filter toggle and clear buttons */}
         <div className="flex justify-between items-center">
           <Button
             variant="outline"
@@ -136,7 +197,7 @@ const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onSearch }) => {
             className="flex items-center gap-1"
           >
             <Filter className="h-4 w-4" />
-            {isFilterExpanded ? "Hide" : "Show"} Filters
+            {isFilterExpanded ? "Hide" : "Show"} Advanced Filters
           </Button>
           {isFilterExpanded && (
             <Button
@@ -153,109 +214,80 @@ const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onSearch }) => {
 
         {/* Expandable filters */}
         {isFilterExpanded && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Term</label>
-              <Select value={term} onValueChange={setTerm}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select term" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Any Term</SelectItem>
-                  <SelectItem value="Fall">Fall</SelectItem>
-                  <SelectItem value="Spring">Spring</SelectItem>
-                  <SelectItem value="Summer">Summer</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Level</label>
-              <Select value={level} onValueChange={setLevel}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Any Level</SelectItem>
-                  <SelectItem value="undergraduate">Undergraduate</SelectItem>
-                  <SelectItem value="graduate">Graduate</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Department</label>
-              <Select value={department} onValueChange={setDepartment}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select department" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Any Department</SelectItem>
-                  {departments.map((dept) => (
-                    <SelectItem key={dept.id} value={dept.code}>
-                      {dept.code} - {dept.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Professor</label>
-              <Select value={professorName} onValueChange={setProfessorName}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select professor" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Any Professor</SelectItem>
-                  {professors.map((prof) => (
-                    <SelectItem key={prof.id} value={prof.name}>
-                      {prof.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Course Number</label>
-              <Input
-                placeholder="e.g. B551, M365"
-                value={courseNumber}
-                onChange={(e) => setCourseNumber(e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-sm font-medium">Mode</label>
-              <Select value={mode} onValueChange={setMode}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select mode" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="">Any Mode</SelectItem>
-                  <SelectItem value="online">Online</SelectItem>
-                  <SelectItem value="in-person">In-Person</SelectItem>
-                  <SelectItem value="hybrid">Hybrid</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-1 col-span-full">
-              <div className="flex justify-between">
-                <label className="text-sm font-medium">Credits: {credits[0]} - {credits[1]}</label>
+          <>
+            <Separator />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Level</label>
+                <Select value={level} onValueChange={setLevel}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Any Level</SelectItem>
+                    <SelectItem value="undergraduate">Undergraduate</SelectItem>
+                    <SelectItem value="graduate">Graduate</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <Slider
-                defaultValue={[1, 4]}
-                min={1}
-                max={6}
-                step={1}
-                value={credits}
-                onValueChange={setCredits}
-                className="py-4"
-              />
+
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Professor</label>
+                <Select value={professorName} onValueChange={setProfessorName}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select professor" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Any Professor</SelectItem>
+                    {professors.map((prof) => (
+                      <SelectItem key={prof.id} value={prof.name}>
+                        {prof.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Course Number</label>
+                <Input
+                  placeholder="e.g. B551, M365"
+                  value={courseNumber}
+                  onChange={(e) => setCourseNumber(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-sm font-medium">Mode</label>
+                <Select value={mode} onValueChange={setMode}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select mode" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Any Mode</SelectItem>
+                    <SelectItem value="online">Online</SelectItem>
+                    <SelectItem value="in-person">In-Person</SelectItem>
+                    <SelectItem value="hybrid">Hybrid</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1 col-span-full md:col-span-2">
+                <div className="flex justify-between">
+                  <label className="text-sm font-medium">Credits: {credits[0]} - {credits[1]}</label>
+                </div>
+                <Slider
+                  defaultValue={[1, 4]}
+                  min={1}
+                  max={6}
+                  step={1}
+                  value={credits}
+                  onValueChange={setCredits}
+                  className="py-4"
+                />
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </div>

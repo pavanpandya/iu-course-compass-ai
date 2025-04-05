@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CourseSearch from "@/components/CourseSearch";
 import CourseCard from "@/components/CourseCard";
+import CourseTable from "@/components/CourseTable";
 import CourseDetailModal from "@/components/CourseDetailModal";
 import CartDrawer from "@/components/CartDrawer";
 import { Course, courses } from "@/data/mockData";
@@ -13,7 +14,12 @@ const Search: React.FC = () => {
   const [searchResults, setSearchResults] = useState<Course[]>(courses);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cartItems, setCartItems] = useState<Course[]>([]);
+  const [cartItems, setCartItems] = useState<Course[]>(() => {
+    // Get cart items from localStorage if they exist
+    const storedCartItems = localStorage.getItem('cartItems');
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
+  });
+  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
 
   const handleViewDetails = (course: Course) => {
     setSelectedCourse(course);
@@ -33,14 +39,22 @@ const Search: React.FC = () => {
       return;
     }
     
-    setCartItems([...cartItems, course]);
+    const updatedCart = [...cartItems, course];
+    setCartItems(updatedCart);
+    // Also store in localStorage
+    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+    
     toast.success("Added to cart", {
       description: `${course.code} has been added to your cart.`,
     });
   };
 
   const removeFromCart = (course: Course) => {
-    setCartItems(cartItems.filter(item => item.id !== course.id));
+    const updatedCart = cartItems.filter(item => item.id !== course.id);
+    setCartItems(updatedCart);
+    // Update localStorage
+    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+    
     toast.info("Removed from cart", {
       description: `${course.code} has been removed from your cart.`,
     });
@@ -48,6 +62,8 @@ const Search: React.FC = () => {
 
   const clearCart = () => {
     setCartItems([]);
+    // Clear localStorage
+    localStorage.removeItem('cartItems');
   };
 
   return (
@@ -66,7 +82,12 @@ const Search: React.FC = () => {
         <h1 className="text-3xl font-bold mb-6">Course Search</h1>
         
         <div className="mb-8">
-          <CourseSearch courses={courses} onSearch={setSearchResults} />
+          <CourseSearch 
+            courses={courses} 
+            onSearch={setSearchResults} 
+            onViewChange={setViewMode}
+            currentView={viewMode}
+          />
         </div>
         
         <div className="mb-4">
@@ -76,16 +97,24 @@ const Search: React.FC = () => {
         </div>
         
         {searchResults.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {searchResults.map(course => (
-              <CourseCard 
-                key={course.id} 
-                course={course} 
-                onViewDetails={handleViewDetails} 
-                onAddToCart={addToCart} 
-              />
-            ))}
-          </div>
+          viewMode === 'card' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {searchResults.map(course => (
+                <CourseCard 
+                  key={course.id} 
+                  course={course} 
+                  onViewDetails={handleViewDetails} 
+                  onAddToCart={addToCart} 
+                />
+              ))}
+            </div>
+          ) : (
+            <CourseTable
+              courses={searchResults}
+              onViewDetails={handleViewDetails}
+              onUnenroll={addToCart}
+            />
+          )
         ) : (
           <div className="flex flex-col items-center justify-center py-16">
             <div className="bg-gray-100 rounded-full p-4 mb-4">
