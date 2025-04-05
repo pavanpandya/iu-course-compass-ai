@@ -1,5 +1,4 @@
-
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
@@ -51,7 +50,7 @@ const NotFound: React.FC = () => {
               </Link>
             </Button>
             
-            <Button variant="outline" asChild>
+            <Button className="border border-input bg-background hover:bg-accent hover:text-accent-foreground" asChild>
               <Link to="/search">
                 <Search className="mr-2 h-4 w-4" /> Browse Courses
               </Link>

@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -65,14 +64,13 @@ const Index: React.FC = () => {
           <div className="flex flex-wrap justify-center gap-4">
             <Button 
               asChild 
-              size="lg" 
-              className="bg-white text-iu-crimson hover:bg-white/90"
+              className="bg-white text-iu-crimson hover:bg-white/90 h-11 px-8"
             >
               <Link to="/search">
                 <Search className="mr-2 h-5 w-5" /> Find Courses
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+            <Button asChild className="border-white text-white hover:bg-white/10 h-11 px-8">
               <Link to="/chatbot">
                 <MessageCircle className="mr-2 h-5 w-5" /> Ask AI Assistant
               </Link>
@@ -249,7 +247,7 @@ const Index: React.FC = () => {
           </div>
           
           <div className="text-center mt-8">
-            <Button asChild variant="outline" size="lg">
+            <Button asChild className="border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
               <Link to="/search">View All Courses</Link>
             </Button>
           </div>
@@ -266,8 +264,7 @@ const Index: React.FC = () => {
           <div className="flex flex-wrap justify-center gap-4">
             <Button 
               asChild 
-              size="lg" 
-              className="bg-white text-iu-crimson hover:bg-white/90"
+              className="bg-white text-iu-crimson hover:bg-white/90 h-11 px-8"
             >
               <Link to="/search">
                 <Search className="mr-2 h-5 w-5" /> Find Courses
@@ -275,9 +272,7 @@ const Index: React.FC = () => {
             </Button>
             <Button 
               asChild 
-              size="lg" 
-              variant="outline" 
-              className="border-white text-white hover:bg-white/10"
+              className="border-white text-white hover:bg-white/10 h-11 px-8"
             >
               <Link to="/chatbot">
                 <MessageCircle className="mr-2 h-5 w-5" /> Ask AI Assistant

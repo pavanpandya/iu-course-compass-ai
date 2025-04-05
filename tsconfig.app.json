@@ -5,6 +5,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "types": ["d3-array", "d3-color", "d3-ease", "d3-interpolate"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",

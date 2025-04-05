@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -88,19 +87,15 @@ const EnrolledCourses: React.FC = () => {
             
             <div className="flex items-center border rounded-md">
               <Button
-                variant={viewMode === "card" ? "default" : "ghost"} 
-                size="sm"
+                className={`rounded-r-none h-9 px-3 ${viewMode === "card" ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent hover:text-accent-foreground"}`}
                 onClick={() => setViewMode("card")}
-                className="rounded-r-none"
               >
                 <Grid className="h-4 w-4 mr-1" />
                 Cards
               </Button>
               <Button
-                variant={viewMode === "table" ? "default" : "ghost"}
-                size="sm"
+                className={`rounded-l-none h-9 px-3 ${viewMode === "table" ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent hover:text-accent-foreground"}`}
                 onClick={() => setViewMode("table")}
-                className="rounded-l-none"
               >
                 <List className="h-4 w-4 mr-1" />
                 Table
@@ -152,8 +147,7 @@ const EnrolledCourses: React.FC = () => {
                     onViewDetails={() => {}} 
                     actionButton={
                       <Button 
-                        variant="outline" 
-                        className="w-full" 
+                        className="w-full border border-input bg-background hover:bg-accent hover:text-accent-foreground" 
                         onClick={() => handleUnenroll(course.id)}
                       >
                         Unenroll
