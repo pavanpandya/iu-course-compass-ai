@@ -1,28 +1,33 @@
 
-import { Routes, Route } from 'react-router-dom';
-import Index from './pages/Index';
-import Recommendations from './pages/Recommendations';
-import Search from './pages/Search';
-import ChatbotPage from './pages/Chatbot';
-import Enrolled from './pages/Enrolled';
-import NotFound from './pages/NotFound';
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
+import Search from "./pages/Search";
+import Recommendations from "./pages/Recommendations";
+import Chatbot from "./pages/Chatbot";
+import NotFound from "./pages/NotFound";
 
-import { Toaster } from 'sonner';
+const queryClient = new QueryClient();
 
-function App() {
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/recommendations" element={<Recommendations />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/chatbot" element={<ChatbotPage />} />
-        <Route path="/enrolled" element={<Enrolled />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
       <Toaster />
-    </>
-  )
-}
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/recommendations" element={<Recommendations />} />
+          <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;
