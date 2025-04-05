@@ -30,7 +30,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onViewDetails, onAddToC
         <div className="flex justify-between items-start">
           <div className="flex-grow pr-2">
             <p className="text-sm text-muted-foreground font-medium">{course.code}</p>
-            <CardTitle className="text-lg mt-1 line-clamp-2">{course.name}</CardTitle>
+            <CardTitle className="text-lg mt-1 line-clamp-2 min-h-[2.75rem]">{course.name}</CardTitle>
           </div>
           <Badge variant={course.mode === "Online" ? "outline" : "default"} className="ml-2 shrink-0">
             {course.mode}
@@ -89,7 +89,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onViewDetails, onAddToC
         </div>
       </CardContent>
       
-      <CardFooter className="flex gap-2 pt-3 border-t">
+      <CardFooter className="flex gap-2 pt-3 border-t items-center">
         <Button variant="outline" className="flex-1 truncate" onClick={() => onViewDetails(course)}>
           View Details
         </Button>
