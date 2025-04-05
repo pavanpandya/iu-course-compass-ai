@@ -1,154 +1,192 @@
+import React, { useState, useEffect } from 'react';
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Course } from '../types';
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
+import { Separator } from "@/components/ui/separator"
+import { Badge } from "@/components/ui/badge"
+import { Calendar } from "@/components/ui/calendar"
+import { CalendarIcon } from "lucide-react"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { useToast } from "@/components/ui/use-toast"
 
-import React, { useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import CourseSearch from "@/components/CourseSearch";
-import CourseCard from "@/components/CourseCard";
-import CourseTable from "@/components/CourseTable";
-import CourseDetailModal from "@/components/CourseDetailModal";
-import CartDrawer from "@/components/CartDrawer";
-import { Course, courses } from "@/data/mockData";
-import { toast } from "sonner";
+interface SearchProps {
+  onAddToCart: (courseId: string) => void;
+}
 
-const Search: React.FC = () => {
-  const [searchResults, setSearchResults] = useState<Course[]>(courses);
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cartItems, setCartItems] = useState<Course[]>(() => {
-    // Get cart items from localStorage if they exist
-    const storedCartItems = localStorage.getItem('cartItems');
-    return storedCartItems ? JSON.parse(storedCartItems) : [];
+const CourseCard: React.FC<{ course: Course; onAddToCart: () => void }> = ({ course, onAddToCart }) => {
+  return (
+    <Card className="bg-card text-card-foreground shadow-md">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold">{course.title}</CardTitle>
+        <CardDescription>{course.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p>Instructor: {course.instructor}</p>
+        <p>Credits: {course.credits}</p>
+      </CardContent>
+      <CardFooter className="flex justify-between items-center">
+        <Badge variant="secondary">Available</Badge>
+        <Button onClick={onAddToCart}>Add to Cart</Button>
+      </CardFooter>
+    </Card>
+  );
+};
+
+const Search: React.FC<SearchProps> = ({ onAddToCart }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [credits, setCredits] = useState<number[]>([0, 5]);
+  const [selectedTerm, setSelectedTerm] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Fetch courses from API or database here
+    // Replace this with your actual data fetching logic
+    const mockCourses: Course[] = [
+      { id: '1', title: 'Introduction to React', description: 'Learn the basics of React', instructor: 'John Doe', credits: 3, term: 'Fall 2023' },
+      { id: '2', title: 'Advanced JavaScript', description: 'Deep dive into JavaScript concepts', instructor: 'Jane Smith', credits: 4, term: 'Spring 2024' },
+      { id: '3', title: 'Data Structures and Algorithms', description: 'Master data structures and algorithms', instructor: 'David Johnson', credits: 5, term: 'Fall 2023' },
+    ];
+    setCourses(mockCourses);
+  }, []);
+
+  const filteredCourses = courses.filter(course => {
+    const searchTermMatch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      course.instructor.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const creditsMatch = course.credits >= credits[0] && course.credits <= credits[1];
+
+    const termMatch = selectedTerm ? course.term === selectedTerm : true;
+
+    const dateMatch = selectedDate ? course.term === format(selectedDate, 'MMMM yyyy') : true;
+
+    return searchTermMatch && creditsMatch && termMatch && dateMatch;
   });
-  const [viewMode, setViewMode] = useState<'card' | 'table'>('card');
 
-  const handleViewDetails = (course: Course) => {
-    setSelectedCourse(course);
-    setIsModalOpen(true);
-  };
+  const handleAddToCart = (course: Course) => {
+    const courseId = course.id;
+    onAddToCart(courseId);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const addToCart = (course: Course) => {
-    // Check if course already exists in cart
-    if (cartItems.some(item => item.id === course.id)) {
-      toast.error("Already in cart", {
-        description: `${course.code} is already in your cart.`,
-      });
-      return;
-    }
-    
-    const updatedCart = [...cartItems, course];
-    setCartItems(updatedCart);
-    // Also store in localStorage
-    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
-    
-    toast.success("Added to cart", {
-      description: `${course.code} has been added to your cart.`,
-    });
-  };
-
-  const removeFromCart = (course: Course) => {
-    const updatedCart = cartItems.filter(item => item.id !== course.id);
-    setCartItems(updatedCart);
-    // Update localStorage
-    localStorage.setItem('cartItems', JSON.stringify(updatedCart));
-    
-    toast.info("Removed from cart", {
-      description: `${course.code} has been removed from your cart.`,
-    });
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-    // Clear localStorage
-    localStorage.removeItem('cartItems');
+    toast({
+      title: "Course added to cart.",
+      description: `${course.title} has been successfully added to your cart.`,
+    })
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      
-      <div className="fixed top-4 right-4 z-50">
-        <CartDrawer 
-          cartItems={cartItems}
-          removeFromCart={removeFromCart}
-          clearCart={clearCart}
-        />
-      </div>
-      
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Course Search</h1>
-        
-        <div className="mb-8">
-          <CourseSearch 
-            courses={courses} 
-            onSearch={setSearchResults} 
-            onViewChange={setViewMode}
-            currentView={viewMode}
-          />
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Course Search</h1>
+
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-4">
+        <div className="md:col-span-1">
+          <Card className="bg-card text-card-foreground shadow-md">
+            <CardHeader>
+              <CardTitle>Filters</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="search">Search</Label>
+                  <Input
+                    type="text"
+                    id="search"
+                    placeholder="Search by course title, description, or instructor"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+
+                <Separator />
+
+                <div>
+                  <Label>Credits</Label>
+                  <div className="flex items-center space-x-2">
+                    <p>{credits[0]}</p>
+                    <Slider
+                      defaultValue={credits}
+                      max={5}
+                      step={1}
+                      onValueChange={(value) => setCredits(value)}
+                    />
+                    <p>{credits[1]}</p>
+                  </div>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <Label>Term</Label>
+                  <Select onValueChange={setSelectedTerm}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a term" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Fall 2023">Fall 2023</SelectItem>
+                      <SelectItem value="Spring 2024">Spring 2024</SelectItem>
+                      <SelectItem value="Summer 2024">Summer 2024</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Separator />
+
+                <div>
+                  <Label>Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] justify-start text-left font-normal",
+                          !selectedDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {selectedDate ? format(selectedDate, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="center" side="bottom">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        disabled={(date) =>
+                          date > new Date()
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-        
-        <div className="mb-4">
-          <p className="text-gray-600">
-            {searchResults.length} {searchResults.length === 1 ? "course" : "courses"} found
-          </p>
-        </div>
-        
-        {searchResults.length > 0 ? (
-          viewMode === 'card' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {searchResults.map(course => (
-                <CourseCard 
-                  key={course.id} 
-                  course={course} 
-                  onViewDetails={handleViewDetails} 
-                  onAddToCart={addToCart} 
-                />
-              ))}
-            </div>
-          ) : (
-            <CourseTable
-              courses={searchResults}
-              onViewDetails={handleViewDetails}
-              onUnenroll={addToCart}
+
+        <div className="md:col-span-3 grid gap-4 grid-cols-1 md:grid-cols-2">
+          {filteredCourses.map(course => (
+            <CourseCard
+              key={course.id}
+              course={course}
+              onAddToCart={() => handleAddToCart(course)}
             />
-          )
-        ) : (
-          <div className="flex flex-col items-center justify-center py-16">
-            <div className="bg-gray-100 rounded-full p-4 mb-4">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="h-12 w-12 text-gray-400" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
-                />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold mb-2">No courses found</h3>
-            <p className="text-gray-600 text-center max-w-md">
-              We couldn't find any courses matching your search criteria. Try adjusting your filters or search term.
-            </p>
-          </div>
-        )}
-      </main>
-      
-      <CourseDetailModal
-        course={selectedCourse}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onAddToCart={addToCart}
-      />
-      
-      <Footer />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
