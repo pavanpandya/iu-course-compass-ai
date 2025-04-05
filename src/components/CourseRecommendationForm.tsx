@@ -147,7 +147,7 @@ const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="fulltime">Full-time (12+ credits)</SelectItem>
-            <SelectItem value="parttime">Part-time (< 12 credits)</SelectItem>
+            <SelectItem value="parttime">Part-time (&lt; 12 credits)</SelectItem>
           </SelectContent>
         </Select>
       </div>
