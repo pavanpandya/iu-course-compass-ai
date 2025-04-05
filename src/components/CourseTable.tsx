@@ -1,5 +1,4 @@
-
-import React from "react";
+import { FC } from "react";
 import { Course } from "@/data/mockData";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +19,7 @@ interface CourseTableProps {
   onAddToCart?: (courseId: string) => void;
 }
 
-const CourseTable: React.FC<CourseTableProps> = ({ 
+const CourseTable: FC<CourseTableProps> = ({ 
   courses, 
   onUnenroll, 
   addToCartButton = false,
@@ -52,7 +51,7 @@ const CourseTable: React.FC<CourseTableProps> = ({
               </TableCell>
               <TableCell>{course.credits}</TableCell>
               <TableCell>
-                <Badge variant={course.mode === "Online" ? "outline" : "default"}>
+                <Badge className={course.mode === "Online" ? "border border-input bg-background" : "bg-primary text-primary-foreground"}>
                   {course.mode}
                 </Badge>
               </TableCell>
@@ -60,8 +59,7 @@ const CourseTable: React.FC<CourseTableProps> = ({
               <TableCell className="text-right">
                 {addToCartButton ? (
                   <Button
-                    variant="outline"
-                    size="sm"
+                    className="h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
                     onClick={() => onAddToCart(course.id)}
                   >
                     <ShoppingCart className="h-3.5 w-3.5 mr-1" />
@@ -69,8 +67,7 @@ const CourseTable: React.FC<CourseTableProps> = ({
                   </Button>
                 ) : (
                   <Button
-                    variant="outline"
-                    size="sm"
+                    className="h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
                     onClick={() => onUnenroll(course.id)}
                   >
                     Unenroll

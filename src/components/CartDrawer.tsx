@@ -1,5 +1,4 @@
-
-import React from "react";
+import { FC } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -41,7 +40,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variant="outline" size="icon" className="relative">
+        <Button className="relative border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
           <ShoppingCart className="h-4 w-4" />
           {cartItems.length > 0 && (
             <span className="absolute -top-2 -right-2 bg-iu-crimson text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
@@ -74,8 +73,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-medium">{course.code}</p>
                           <Badge 
-                            variant={course.mode === "Online" ? "outline" : "default"}
-                            className="ml-2"
+                            className={`ml-2 ${course.mode === "Online" ? "text-foreground" : "border-transparent bg-primary text-primary-foreground hover:bg-primary/80"}`}
                           >
                             {course.mode}
                           </Badge>
@@ -94,10 +92,8 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                         </div>
                       </div>
                       <Button
-                        variant="ghost"
-                        size="icon"
+                        className="ml-2 h-10 w-10 hover:bg-accent hover:text-accent-foreground"
                         onClick={() => removeFromCart(course)}
-                        className="ml-2"
                       >
                         <X className="h-4 w-4" />
                       </Button>
@@ -120,11 +116,11 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
               
               <DrawerFooter>
                 <Button onClick={handleEnroll}>Enroll in Courses</Button>
-                <Button variant="outline" onClick={clearCart}>
+                <Button className="border border-input bg-background hover:bg-accent hover:text-accent-foreground" onClick={clearCart}>
                   Clear Cart
                 </Button>
                 <DrawerClose asChild>
-                  <Button variant="ghost">Cancel</Button>
+                  <Button className="hover:bg-accent hover:text-accent-foreground">Cancel</Button>
                 </DrawerClose>
               </DrawerFooter>
             </>
@@ -136,7 +132,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                 Add courses to your cart to get started.
               </p>
               <DrawerClose asChild>
-                <Button variant="outline" className="mt-4">
+                <Button className="mt-4 border border-input bg-background hover:bg-accent hover:text-accent-foreground">
                   Browse Courses
                 </Button>
               </DrawerClose>

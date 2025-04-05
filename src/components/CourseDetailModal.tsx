@@ -1,5 +1,6 @@
+"use client";
 
-import React from "react";
+import { FC } from "react";
 import {
   Dialog,
   DialogContent,
@@ -22,7 +23,7 @@ interface CourseDetailModalProps {
   onAddToCart: (course: Course) => void;
 }
 
-const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
+const CourseDetailModal: FC<CourseDetailModalProps> = ({
   course,
   isOpen,
   onClose,
@@ -43,11 +44,11 @@ const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
               </DialogDescription>
             </div>
             <div className="flex items-center space-x-2">
-              <Badge variant={course.mode === "Online" ? "outline" : "default"}>
+              <Badge className={course.mode === "Online" ? "border border-input bg-background" : "bg-primary text-primary-foreground"}>
                 {course.mode}
               </Badge>
               <DialogClose asChild>
-                <Button variant="ghost" size="icon">
+                <Button className="h-10 w-10 p-0 hover:bg-accent hover:text-accent-foreground">
                   <X className="h-4 w-4" />
                 </Button>
               </DialogClose>
@@ -136,7 +137,7 @@ const CourseDetailModal: React.FC<CourseDetailModalProps> = ({
 
             <div className="flex justify-end space-x-2 mt-4 pt-4 border-t">
               <DialogClose asChild>
-                <Button variant="outline">Close</Button>
+                <Button className="border border-input bg-background hover:bg-accent hover:text-accent-foreground">Close</Button>
               </DialogClose>
               <Button onClick={() => onAddToCart(course)}>Add to Cart</Button>
             </div>

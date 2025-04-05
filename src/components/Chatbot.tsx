@@ -1,5 +1,4 @@
-
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -134,15 +133,14 @@ const Chatbot: React.FC = () => {
           />
           <Button 
             type="submit" 
-            size="icon" 
+            className="h-10 w-10 p-0"
             disabled={!input.trim() || isLoading}
           >
             <Send className="h-4 w-4" />
           </Button>
           <Button 
             type="button" 
-            size="icon" 
-            variant="outline" 
+            className="h-10 w-10 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
             disabled={isLoading}
             title="Voice input (coming soon)"
           >

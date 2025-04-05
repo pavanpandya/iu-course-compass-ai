@@ -247,7 +247,7 @@ const Index: React.FC = () => {
           </div>
           
           <div className="text-center mt-8">
-            <Button asChild className="border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
+            <Button asChild className="border border-input text-accent-foreground bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
               <Link to="/search">View All Courses</Link>
             </Button>
           </div>
