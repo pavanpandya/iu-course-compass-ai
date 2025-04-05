@@ -8,9 +8,12 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import { Course, courses } from "@/data/mockData";
 import { toast } from "sonner";
+import CourseDetailModal from "@/components/CourseDetailModal";
 
 const Index: React.FC = () => {
   const [cartItems, setCartItems] = useState<Course[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const addToCart = (course: Course) => {
     // Check if course already exists in cart
@@ -39,6 +42,15 @@ const Index: React.FC = () => {
   };
 
   const featuredCourses = courses.slice(0, 3);
+
+  const handleViewDetails = (course: Course) => {
+    setSelectedCourse(course);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -70,9 +82,12 @@ const Index: React.FC = () => {
                 <Search className="mr-2 h-5 w-5" /> Find Courses
               </Link>
             </Button>
-            <Button asChild className="border-white text-white hover:bg-white/10 h-11 px-8">
+            <Button 
+              asChild 
+              className="border border-white text-white hover:bg-white/10 h-11 px-8"
+            >
               <Link to="/chatbot">
-                <MessageCircle className="mr-2 h-5 w-5" /> Ask AI Assistant
+              <MessageCircle className="mr-2 h-5 w-5" /> Ask AI Assistant
               </Link>
             </Button>
           </div>
@@ -227,9 +242,9 @@ const Index: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {featuredCourses.map(course => (
               <div key={course.id} className="border rounded-lg shadow-md overflow-hidden bg-white">
-                <div className="p-4 border-b">
+                <div className="p-4 border-b h-32 flex flex-col justify-center">
                   <p className="text-sm text-gray-500">{course.code}</p>
-                  <h3 className="font-bold text-lg">{course.name}</h3>
+                  <h3 className="font-bold text-lg line-clamp-2 min-h-[3rem]">{course.name}</h3>
                 </div>
                 <div className="p-4 space-y-2">
                   <p className="text-sm"><span className="font-medium">Professor:</span> {course.professor.name}</p>
@@ -237,7 +252,10 @@ const Index: React.FC = () => {
                   <p className="text-sm"><span className="font-medium">Term:</span> {course.term} {course.year}</p>
                   <p className="text-sm"><span className="font-medium">Rating:</span> {course.ocq.overall.toFixed(1)}/5.0</p>
                 </div>
-                <div className="p-4 border-t bg-gray-50">
+                <div className="p-4 flex items-center justify-between gap-2 border-t bg-gray-50">
+                  <Button onClick={() => handleViewDetails(course)} className="w-full">
+                    Details
+                  </Button>
                   <Button onClick={() => addToCart(course)} className="w-full">
                     Add to Cart
                   </Button>
@@ -246,11 +264,11 @@ const Index: React.FC = () => {
             ))}
           </div>
           
-          <div className="text-center mt-8">
-            <Button asChild className="border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
+            <div className="text-center mt-8">
+            <Button asChild className="bg-white text-iu-crimson border border-iu-crimson hover:bg-red-900/10 h-11 px-8">
               <Link to="/search">View All Courses</Link>
             </Button>
-          </div>
+            </div>
         </div>
       </section>
       
@@ -272,10 +290,10 @@ const Index: React.FC = () => {
             </Button>
             <Button 
               asChild 
-              className="border-white text-white hover:bg-white/10 h-11 px-8"
+              className="border border-white text-white hover:bg-white/10 h-11 px-8"
             >
               <Link to="/chatbot">
-                <MessageCircle className="mr-2 h-5 w-5" /> Ask AI Assistant
+              <MessageCircle className="mr-2 h-5 w-5" /> Ask AI Assistant
               </Link>
             </Button>
           </div>
@@ -283,6 +301,16 @@ const Index: React.FC = () => {
       </section>
       
       <Footer />
+
+      {/* Render the CourseDetailModal */}
+      {isModalOpen && selectedCourse && (
+        <CourseDetailModal
+          course={selectedCourse}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onAddToCart={addToCart}
+        />
+      )}
     </div>
   );
 };
