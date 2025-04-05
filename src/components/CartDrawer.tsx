@@ -16,26 +16,26 @@ import { ShoppingCart, X, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
 
 interface CartDrawerProps {
   cartItems: Course[];
   removeFromCart: (course: Course) => void;
   clearCart: () => void;
+  onEnroll?: () => void;
 }
 
 const CartDrawer: React.FC<CartDrawerProps> = ({ 
   cartItems, 
   removeFromCart, 
-  clearCart 
+  clearCart,
+  onEnroll 
 }) => {
   const totalCredits = cartItems.reduce((total, course) => total + course.credits, 0);
   
   const handleEnroll = () => {
-    toast.success("Enrollment Successful", {
-      description: `You have successfully enrolled in ${cartItems.length} courses for a total of ${totalCredits} credits.`,
-    });
-    clearCart();
+    if (onEnroll) {
+      onEnroll();
+    }
   };
   
   return (

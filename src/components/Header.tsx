@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { User, Menu, LogIn } from "lucide-react";
+import { User, Menu, LogIn, BookOpen } from "lucide-react";
 
 const Header: React.FC = () => {
   return (
@@ -24,6 +24,11 @@ const Header: React.FC = () => {
               <li>
                 <Link to="/search" className="hover:underline">
                   Course Search
+                </Link>
+              </li>
+              <li>
+                <Link to="/enrolled-courses" className="hover:underline">
+                  My Courses
                 </Link>
               </li>
               <li>
