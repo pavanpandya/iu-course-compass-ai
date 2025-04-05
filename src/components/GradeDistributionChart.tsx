@@ -1,0 +1,57 @@
+
+import React from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { GradeDistribution } from "@/data/mockData";
+
+interface GradeDistributionChartProps {
+  grades: GradeDistribution;
+}
+
+const GradeDistributionChart: React.FC<GradeDistributionChartProps> = ({ grades }) => {
+  // Transform grade distribution object into array format for recharts
+  const data = Object.entries(grades).map(([grade, count]) => ({
+    grade,
+    count,
+  }));
+
+  // Custom colors for grade bars
+  const getBarColor = (grade: string) => {
+    switch (grade) {
+      case "A":
+        return "#4CAF50";
+      case "B":
+        return "#8BC34A";
+      case "C":
+        return "#FFC107";
+      case "D":
+        return "#FF9800";
+      case "F":
+        return "#F44336";
+      case "Withdraw":
+        return "#9E9E9E";
+      default:
+        return "#990000";
+    }
+  };
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+        <XAxis dataKey="grade" />
+        <YAxis />
+        <Tooltip
+          formatter={(value) => [`${value} students`, "Count"]}
+          labelFormatter={(label) => `Grade: ${label}`}
+        />
+        <Bar
+          dataKey="count"
+          name="Students"
+          fill={(entry) => getBarColor(entry.grade)}
+          radius={[4, 4, 0, 0]}
+        />
+      </BarChart>
+    </ResponsiveContainer>
+  );
+};
+
+export default GradeDistributionChart;
