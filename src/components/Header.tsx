@@ -1,3 +1,4 @@
+
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -44,9 +45,11 @@ const Header: FC = () => {
           </nav>
           
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20">
-              <LogIn className="h-4 w-4 mr-2" /> Sign In
-            </Button>
+            <Link to="/signin">
+              <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20">
+                <LogIn className="h-4 w-4 mr-2" /> Sign In
+              </Button>
+            </Link>
             <Button className="hover:bg-accent hover:text-accent-foreground md:hidden" aria-label="Menu">
               <Menu className="h-6 w-6" />
             </Button>

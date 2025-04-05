@@ -9,6 +9,7 @@ import Search from "./pages/Search";
 import Recommendations from "./pages/Recommendations";
 import Chatbot from "./pages/Chatbot";
 import EnrolledCourses from "./pages/EnrolledCourses";
+import SignIn from "./pages/SignIn";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/enrolled-courses" element={<EnrolledCourses />} />
+          <Route path="/signin" element={<SignIn />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
