@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -7,7 +6,7 @@ import CourseCard from "@/components/CourseCard";
 import CourseDetailModal from "@/components/CourseDetailModal";
 import CartDrawer from "@/components/CartDrawer";
 import { Course, courses } from "@/data/mockData";
-import { Tabs, TabsContent, TabsItem, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 const Recommendations: React.FC = () => {
@@ -26,7 +25,6 @@ const Recommendations: React.FC = () => {
   };
 
   const addToCart = (course: Course) => {
-    // Check if course already exists in cart
     if (cartItems.some(item => item.id === course.id)) {
       toast.error("Already in cart", {
         description: `${course.code} is already in your cart.`,

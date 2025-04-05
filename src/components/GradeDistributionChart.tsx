@@ -1,6 +1,6 @@
 
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { GradeDistribution } from "@/data/mockData";
 
 interface GradeDistributionChartProps {
@@ -43,12 +43,11 @@ const GradeDistributionChart: React.FC<GradeDistributionChartProps> = ({ grades 
           formatter={(value) => [`${value} students`, "Count"]}
           labelFormatter={(label) => `Grade: ${label}`}
         />
-        <Bar
-          dataKey="count"
-          name="Students"
-          fill={(entry) => getBarColor(entry.grade)}
-          radius={[4, 4, 0, 0]}
-        />
+        <Bar dataKey="count" name="Students" fill="#8884d8" radius={[4, 4, 0, 0]}>
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={getBarColor(entry.grade)} />
+          ))}
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );
