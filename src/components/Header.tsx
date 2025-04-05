@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import React from "react";
-=======
 import { FC } from "react";
->>>>>>> fefe0df64723b7469feef627c866efde9b6937ef
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { User, Menu, LogIn, BookOpen } from "lucide-react";
@@ -48,14 +44,7 @@ const Header: FC = () => {
           </nav>
           
           <div className="flex items-center gap-2">
-<<<<<<< HEAD
-            <Button
-              variant="outline"
-              className="text-black bg-white/10 border-black/20 hover:bg-white/20 hover:text-iu-crimson transition-colors duration-200"
-            >
-=======
-            <Button className="border border-input bg-background hover:bg-accent hover:text-accent-foreground">
->>>>>>> fefe0df64723b7469feef627c866efde9b6937ef
+            <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20">
               <LogIn className="h-4 w-4 mr-2" /> Sign In
             </Button>
             <Button className="hover:bg-accent hover:text-accent-foreground md:hidden" aria-label="Menu">
