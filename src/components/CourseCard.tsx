@@ -1,5 +1,6 @@
+"use client";
 
-import React from "react";
+import { FC } from "react";
 import { Course } from "@/data/mockData";
 import {
   Card,
@@ -19,7 +20,7 @@ interface CourseCardProps {
   actionButton?: React.ReactNode;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({
+const CourseCard: FC<CourseCardProps> = ({
   course,
   onViewDetails,
   onAddToCart,
@@ -30,12 +31,11 @@ const CourseCard: React.FC<CourseCardProps> = ({
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
           <Badge 
-            variant={course.mode === "Online" ? "outline" : "default"}
-            className="mb-1"
+            className={`mb-1 ${course.mode === "Online" ? "border border-input bg-background" : "bg-primary text-primary-foreground"}`}
           >
             {course.mode}
           </Badge>
-          <Badge variant="secondary">
+          <Badge className="bg-secondary text-secondary-foreground">
             {course.term}
           </Badge>
         </div>
@@ -74,8 +74,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
 
       <CardFooter className="pt-0 flex items-center justify-between gap-2">
         <Button 
-          variant="outline" 
-          className="w-full"
+          className="w-full border border-input bg-background hover:bg-accent hover:text-accent-foreground"
           onClick={() => onViewDetails(course)}
         >
           Details

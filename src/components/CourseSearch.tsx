@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Course } from "@/data/mockData";
@@ -123,9 +122,7 @@ const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onSearch }) => {
           />
           {searchTerm && (
             <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-0 top-0 h-9 w-9"
+              className="absolute right-0 top-0 h-9 w-9 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
               onClick={() => setSearchTerm("")}
             >
               <X className="h-4 w-4" />
@@ -186,13 +183,13 @@ const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onSearch }) => {
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <div className="flex items-center justify-between">
             <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="sm" className="flex items-center gap-1">
+              <Button className="flex items-center gap-1 h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground">
                 <Filter className="h-4 w-4" />
                 {isOpen ? "Hide Advanced Filters" : "Show Advanced Filters"}
               </Button>
             </CollapsibleTrigger>
             
-            <Button variant="outline" size="sm" onClick={resetFilters}>
+            <Button className="h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground" onClick={resetFilters}>
               Reset Filters
             </Button>
           </div>

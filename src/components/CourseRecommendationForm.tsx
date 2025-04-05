@@ -1,5 +1,6 @@
+"use client";
 
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -129,9 +130,8 @@ const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({
             <Button
               key={day}
               type="button"
-              variant={availableDays.includes(day) ? "default" : "outline"}
+              className={`flex-1 ${availableDays.includes(day) ? "bg-primary text-primary-foreground hover:bg-primary/90" : "border border-input bg-background hover:bg-accent hover:text-accent-foreground"}`}
               onClick={() => handleDayToggle(day)}
-              className="flex-1"
             >
               {day}
             </Button>

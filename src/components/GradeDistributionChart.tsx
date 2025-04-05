@@ -1,13 +1,20 @@
-
-import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { FC } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell
+} from "recharts/lib/index.js";
 import { GradeDistribution } from "@/data/mockData";
 
 interface GradeDistributionChartProps {
   grades: GradeDistribution;
 }
 
-const GradeDistributionChart: React.FC<GradeDistributionChartProps> = ({ grades }) => {
+const GradeDistributionChart: FC<GradeDistributionChartProps> = ({ grades }) => {
   // Transform grade distribution object into array format for recharts
   const data = Object.entries(grades).map(([grade, count]) => ({
     grade,
