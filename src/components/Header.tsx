@@ -32,8 +32,9 @@ const Header: FC = () => {
   }, []);
 
   return (
-    <header className="bg-white text-white shadow-md">
+    <header className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <div className="rounded-full bg-iu-crimson p-1">
             <div className="text-white font-bold text-xl">IU</div>
@@ -44,19 +45,20 @@ const Header: FC = () => {
           </div>
         </Link>
 
-        <div className="flex items-center gap-4">
-          <nav className="hidden md:block">
-            <ul className="flex items-center gap-6">
-              <li className="text-iu-crimson font-bold"><Link to="/search" className="hover:text-red-700">Course Search</Link></li>
-              <li className="text-iu-crimson font-bold"><Link to="/enrolled-courses" className="hover:text-red-700">My Courses</Link></li>
-              <li className="text-iu-crimson font-bold"><Link to="/recommendations" className="hover:text-red-700">Recommendations</Link></li>
-              <li className="text-iu-crimson font-bold"><Link to="/chatbot" className="hover:text-red-700">AI Assistant</Link></li>
-            </ul>
+        {/* Right side: nav + user */}
+        <div className="flex items-center gap-6">
+          {/* Desktop nav */}
+          <nav className="hidden md:flex gap-6 items-center">
+            <Link to="/search" className="text-iu-crimson font-bold hover:text-red-700">Course Search</Link>
+            <Link to="/enrolled-courses" className="text-iu-crimson font-bold hover:text-red-700">My Courses</Link>
+            <Link to="/recommendations" className="text-iu-crimson font-bold hover:text-red-700">Recommendations</Link>
+            <Link to="/chatbot" className="text-iu-crimson font-bold hover:text-red-700">AI Assistant</Link>
           </nav>
 
-          <div className="flex items-center gap-2 relative">
-          {isAuthenticated ? (
-              <div className="relative" ref={menuRef}>
+          {/* User/Login */}
+          <div className="relative" ref={menuRef}>
+            {isAuthenticated ? (
+              <>
                 <Button
                   variant="ghost"
                   onClick={() => setMenuOpen(!menuOpen)}
@@ -74,7 +76,7 @@ const Header: FC = () => {
                     </button>
                   </div>
                 )}
-              </div>
+              </>
             ) : (
               <Link to="/signin">
                 <Button variant="outline" className="text-black bg-white/10 border-black/20 hover:bg-white/20 hover:text-iu-crimson transition-colors duration-200">
@@ -82,12 +84,30 @@ const Header: FC = () => {
                 </Button>
               </Link>
             )}
-            <Button className="hover:bg-accent hover:text-accent-foreground md:hidden" aria-label="Menu">
-              <Menu className="h-6 w-6" />
-            </Button>
           </div>
+
+          {/* Mobile Menu Button */}
+          <Button
+            className="md:hidden hover:bg-accent hover:text-accent-foreground"
+            aria-label="Menu"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <Menu className="h-6 w-6" />
+          </Button>
         </div>
       </div>
+
+      {/* Mobile dropdown */}
+      {menuOpen && (
+        <div className="md:hidden bg-white border-t shadow-md p-4 absolute w-full z-40">
+          <ul className="space-y-4">
+            <li><Link to="/search" onClick={() => setMenuOpen(false)} className="block text-iu-crimson font-bold">Course Search</Link></li>
+            <li><Link to="/enrolled-courses" onClick={() => setMenuOpen(false)} className="block text-iu-crimson font-bold">My Courses</Link></li>
+            <li><Link to="/recommendations" onClick={() => setMenuOpen(false)} className="block text-iu-crimson font-bold">Recommendations</Link></li>
+            <li><Link to="/chatbot" onClick={() => setMenuOpen(false)} className="block text-iu-crimson font-bold">AI Assistant</Link></li>
+          </ul>
+        </div>
+      )}
     </header>
   );
 };

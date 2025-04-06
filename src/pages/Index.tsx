@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,15 +15,30 @@ const Index: React.FC = () => {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Load cart items from localStorage on component mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    if (savedCart) {
+      try {
+        setCartItems(JSON.parse(savedCart));
+      } catch (error) {
+        console.error("Failed to parse cart items:", error);
+      }
+    }
+  }, []);
+
+  // Save cart items to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
+
   const addToCart = (course: Course) => {
-    // Check if course already exists in cart
-    if (cartItems.some(item => item.id === course.id)) {
+    if (cartItems.some((item) => item.id === course.id)) {
       toast.error("Already in cart", {
         description: `${course.code} is already in your cart.`,
       });
       return;
     }
-    
     setCartItems([...cartItems, course]);
     toast.success("Added to cart", {
       description: `${course.code} has been added to your cart.`,
@@ -31,7 +46,7 @@ const Index: React.FC = () => {
   };
 
   const removeFromCart = (course: Course) => {
-    setCartItems(cartItems.filter(item => item.id !== course.id));
+    setCartItems(cartItems.filter((item) => item.id !== course.id));
     toast.info("Removed from cart", {
       description: `${course.code} has been removed from your cart.`,
     });
@@ -39,9 +54,42 @@ const Index: React.FC = () => {
 
   const clearCart = () => {
     setCartItems([]);
+    localStorage.removeItem("cartItems");
   };
 
-  const featuredCourses = courses.slice(0, 3);
+  const handleEnroll = () => {
+    const savedCourses = localStorage.getItem("enrolledCourses");
+    let enrolledCourses: Course[] = [];
+
+    if (savedCourses) {
+      try {
+        enrolledCourses = JSON.parse(savedCourses);
+      } catch (error) {
+        console.error("Failed to parse enrolled courses:", error);
+      }
+    }
+
+    const newEnrolledCourses = [...enrolledCourses];
+    let addedCount = 0;
+
+    cartItems.forEach((course) => {
+      if (!enrolledCourses.some((enrolled) => enrolled.id === course.id)) {
+        newEnrolledCourses.push(course);
+        addedCount++;
+      }
+    });
+
+    localStorage.setItem("enrolledCourses", JSON.stringify(newEnrolledCourses));
+
+    toast.success(`Enrolled in ${addedCount} courses`, {
+      description:
+        addedCount > 0
+          ? `You have successfully enrolled in ${addedCount} new courses.`
+          : "No new courses were added as they were already enrolled.",
+    });
+
+    clearCart();
+  };
 
   const handleViewDetails = (course: Course) => {
     setSelectedCourse(course);
@@ -52,15 +100,19 @@ const Index: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const featuredCourses = courses.slice(0, 3);
+
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      
+
       <div className="fixed top-4 right-4 z-50">
-        <CartDrawer 
+        <CartDrawer
           cartItems={cartItems}
           removeFromCart={removeFromCart}
           clearCart={clearCart}
+          onEnroll={handleEnroll}
         />
       </div>
       

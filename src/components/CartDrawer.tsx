@@ -15,6 +15,7 @@ import { ShoppingCart, X, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
+import { Link } from "react-router-dom";
 
 interface CartDrawerProps {
   cartItems: Course[];
@@ -23,24 +24,22 @@ interface CartDrawerProps {
   onEnroll?: () => void;
 }
 
-const CartDrawer: React.FC<CartDrawerProps> = ({ 
-  cartItems, 
-  removeFromCart, 
+const CartDrawer: FC<CartDrawerProps> = ({
+  cartItems,
+  removeFromCart,
   clearCart,
-  onEnroll 
+  onEnroll,
 }) => {
   const totalCredits = cartItems.reduce((total, course) => total + course.credits, 0);
-  
+
   const handleEnroll = () => {
-    if (onEnroll) {
-      onEnroll();
-    }
+    if (onEnroll) onEnroll();
   };
-  
+
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button className="relative border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+        <Button className="relative h-10 w-10 border border-input bg-background text-black hover:bg-accent hover:text-accent-foreground transition-colors">
           <ShoppingCart className="h-4 w-4" />
           {cartItems.length > 0 && (
             <span className="absolute -top-2 -right-2 bg-iu-crimson text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
@@ -59,7 +58,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                 : "Your cart is empty."}
             </DrawerDescription>
           </DrawerHeader>
-          
+
           {cartItems.length > 0 ? (
             <>
               <ScrollArea className="h-[50vh] px-4">
@@ -72,8 +71,12 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <p className="text-sm font-medium">{course.code}</p>
-                          <Badge 
-                            className={`ml-2 ${course.mode === "Online" ? "text-foreground" : "border-transparent bg-primary text-primary-foreground hover:bg-primary/80"}`}
+                          <Badge
+                            className={`ml-2 ${
+                              course.mode === "Online"
+                                ? "text-white"
+                                : "border-transparent bg-primary text-primary-foreground hover:bg-primary/80"
+                            }`}
                           >
                             {course.mode}
                           </Badge>
@@ -87,7 +90,8 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                         <div className="flex items-center gap-1 text-sm text-gray-600 mt-1">
                           <Calendar className="h-3 w-3" />
                           <span>
-                            {course.schedule.days.join(", ")} {course.schedule.startTime}-{course.schedule.endTime}
+                            {course.schedule.days.join(", ")}{" "}
+                            {course.schedule.startTime}-{course.schedule.endTime}
                           </span>
                         </div>
                       </div>
@@ -101,7 +105,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                   ))}
                 </div>
               </ScrollArea>
-              
+
               <div className="px-4 py-2">
                 <Separator className="my-2" />
                 <div className="flex justify-between text-sm">
@@ -113,10 +117,13 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
                   <span>{cartItems.length}</span>
                 </div>
               </div>
-              
+
               <DrawerFooter>
                 <Button onClick={handleEnroll}>Enroll in Courses</Button>
-                <Button className="border border-input bg-background hover:bg-accent hover:text-accent-foreground" onClick={clearCart}>
+                <Button
+                  className="bg-muted border border-gray-300 text-foreground hover:bg-accent hover:text-accent-foreground"
+                  onClick={clearCart}
+                >
                   Clear Cart
                 </Button>
                 <DrawerClose asChild>
@@ -131,11 +138,22 @@ const CartDrawer: React.FC<CartDrawerProps> = ({
               <p className="text-gray-500 text-sm mt-1">
                 Add courses to your cart to get started.
               </p>
-              <DrawerClose asChild>
-                <Button className="mt-4 border border-input bg-background hover:bg-accent hover:text-accent-foreground">
-                  Browse Courses
-                </Button>
-              </DrawerClose>
+              <div className="mt-4 flex gap-2">
+                <DrawerClose asChild>
+                  <Link to="/search">
+                    <Button className="border border-input bg-background text-black hover:bg-accent hover:text-accent-foreground">
+                      Browse Courses
+                    </Button>
+                  </Link>
+                </DrawerClose>
+                <DrawerClose asChild>
+                  <Link to="/enrolled-courses">
+                    <Button className="border border-input bg-background text-black hover:bg-accent hover:text-accent-foreground">
+                      My Courses
+                    </Button>
+                  </Link>
+                </DrawerClose>
+              </div>
             </div>
           )}
         </div>

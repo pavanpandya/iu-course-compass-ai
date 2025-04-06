@@ -86,20 +86,29 @@ const EnrolledCourses: React.FC = () => {
             </Select>
             
             <div className="flex items-center border rounded-md">
-              <Button
-                className={`rounded-r-none h-9 px-3 ${viewMode === "card" ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent hover:text-accent-foreground"}`}
-                onClick={() => setViewMode("card")}
-              >
-                <Grid className="h-4 w-4 mr-1" />
-                Cards
-              </Button>
-              <Button
-                className={`rounded-l-none h-9 px-3 ${viewMode === "table" ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent hover:text-accent-foreground"}`}
-                onClick={() => setViewMode("table")}
-              >
-                <List className="h-4 w-4 mr-1" />
-                Table
-              </Button>
+            <Button
+              className={`rounded-r-none h-9 px-3 ${
+                viewMode === "card"
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                  : "bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
+              }`}
+              onClick={() => setViewMode("card")}
+            >
+              <Grid className="h-4 w-4 mr-1" />
+              Cards
+            </Button>
+
+            <Button
+              className={`rounded-l-none h-9 px-3 ${
+                viewMode === "table"
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                  : "bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
+              }`}
+              onClick={() => setViewMode("table")}
+            >
+              <List className="h-4 w-4 mr-1" />
+              Table
+            </Button>
             </div>
           </div>
         </div>
@@ -146,8 +155,8 @@ const EnrolledCourses: React.FC = () => {
                     course={course} 
                     onViewDetails={() => {}} 
                     actionButton={
-                      <Button 
-                        className="w-full border border-input bg-background hover:bg-accent hover:text-accent-foreground" 
+                      <Button
+                        className="w-full border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
                         onClick={() => handleUnenroll(course.id)}
                       >
                         Unenroll
