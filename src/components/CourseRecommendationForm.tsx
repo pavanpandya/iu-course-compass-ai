@@ -15,7 +15,7 @@ import {
 import { Course, careerPaths } from "@/data/mockData";
 
 interface CourseRecommendationFormProps {
-  onRecommend: (courses: Course[]) => void;
+  onRecommend: (courses: Course[], careerGoal: string) => void;
 }
 
 const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({
@@ -54,14 +54,14 @@ const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({
       const data = await response.json();
 
       if (response.ok) {
-        onRecommend(data.recommendations || []);
+        onRecommend(data.recommendations || [], careerGoal);
       } else {
         console.error("Error fetching recommendations:", data);
-        onRecommend([]);
+        onRecommend([], careerGoal);
       }
     } catch (error) {
       console.error("Fetch error:", error);
-      onRecommend([]);
+      onRecommend([], careerGoal);
     }
 
     setIsLoading(false);
@@ -137,7 +137,7 @@ const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({
       </div>
 
       <Button type="submit" className="w-full" disabled={isLoading}>
-        {isLoading ? "Generating Recommendations..." : "Get Course Recommendations"}
+        {isLoading ? "Generating Recommendations..." : "Get Recommendations"}
       </Button>
     </form>
   );
