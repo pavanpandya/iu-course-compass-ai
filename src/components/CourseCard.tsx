@@ -30,12 +30,16 @@ const CourseCard: FC<CourseCardProps> = ({
     <Card className="overflow-hidden">
       <CardHeader className="pb-3">
         <div className="flex justify-between items-start">
-          <Badge 
-            className={`mb-1 ${course.mode === "Online" ? "border border-input bg-background" : "bg-primary text-primary-foreground"}`}
-          >
-            {course.mode}
-          </Badge>
-          <Badge className="bg-secondary text-secondary-foreground">
+        <Badge 
+          className={`mb-1 ${
+            course.mode === "Online"
+              ? "bg-muted text-foreground hover:bg-accent hover:text-accent-foreground"
+              : "bg-[#900] text-white"
+          }`}
+        >
+          {course.mode}
+        </Badge>
+          <Badge className="bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground">
             {course.term}
           </Badge>
         </div>
@@ -73,13 +77,12 @@ const CourseCard: FC<CourseCardProps> = ({
       </CardContent>
 
       <CardFooter className="pt-0 flex items-center justify-between gap-2">
-        <Button 
-          className="w-full border border-input bg-background hover:bg-accent hover:text-accent-foreground"
-          onClick={() => onViewDetails(course)}
-        >
-          Details
-        </Button>
-        
+      <Button 
+        className="w-full border border-border bg-muted text-foreground hover:bg-accent hover:text-accent-foreground"
+        onClick={() => onViewDetails(course)}
+      >
+        Details
+      </Button>
         {actionButton ? (
           actionButton
         ) : onAddToCart ? (

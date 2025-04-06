@@ -182,16 +182,21 @@ const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onSearch }) => {
         
         <Collapsible open={isOpen} onOpenChange={setIsOpen}>
           <div className="flex items-center justify-between">
-            <CollapsibleTrigger asChild>
-              <Button className="flex items-center gap-1 h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground">
-                <Filter className="h-4 w-4" />
-                {isOpen ? "Hide Advanced Filters" : "Show Advanced Filters"}
-              </Button>
-            </CollapsibleTrigger>
-            
-            <Button className="h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground" onClick={resetFilters}>
-              Reset Filters
+          <CollapsibleTrigger asChild>
+            <Button
+              className="flex items-center gap-1 h-9 px-3 border border-border bg-muted text-foreground hover:bg-accent hover:text-accent-foreground"
+            >
+              <Filter className="h-4 w-4" />
+              {isOpen ? "Hide Advanced Filters" : "Show Advanced Filters"}
             </Button>
+          </CollapsibleTrigger>
+
+          <Button
+            className="h-9 px-3 border border-border bg-muted text-foreground hover:bg-accent hover:text-accent-foreground"
+            onClick={resetFilters}
+          >
+            Reset Filters
+          </Button>
           </div>
           
           <CollapsibleContent className="space-y-4 mt-4">

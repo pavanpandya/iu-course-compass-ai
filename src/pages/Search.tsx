@@ -133,20 +133,29 @@ const Search: React.FC<SearchProps> = ({ onAddToCart = () => {} }) => {
           <h1 className="text-3xl font-bold mb-6 md:mb-0">Course Search</h1>
           
           <div className="flex items-center border rounded-md">
-            <Button
-              className={`rounded-r-none h-9 px-3 ${viewMode === "card" ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent hover:text-accent-foreground"}`}
-              onClick={() => setViewMode("card")}
-            >
-              <Grid className="h-4 w-4 mr-1" />
-              Cards
-            </Button>
-            <Button
-              className={`rounded-l-none h-9 px-3 ${viewMode === "table" ? "bg-primary text-primary-foreground hover:bg-primary/90" : "hover:bg-accent hover:text-accent-foreground"}`}
-              onClick={() => setViewMode("table")}
-            >
-              <List className="h-4 w-4 mr-1" />
-              Table
-            </Button>
+          <Button
+            className={`rounded-r-none h-9 px-3 ${
+              viewMode === "card"
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
+            }`}
+            onClick={() => setViewMode("card")}
+          >
+            <Grid className="h-4 w-4 mr-1" />
+            Cards
+          </Button>
+
+          <Button
+            className={`rounded-l-none h-9 px-3 ${
+              viewMode === "table"
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
+            }`}
+            onClick={() => setViewMode("table")}
+          >
+            <List className="h-4 w-4 mr-1" />
+            Table
+          </Button>
           </div>
         </div>
         

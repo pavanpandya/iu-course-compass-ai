@@ -1,24 +1,23 @@
-
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
 import { LogIn, Mail, Lock } from "lucide-react";
+import { API_BASE_URL } from "@/config";
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
+  const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!email || !password) {
+
+    if (!username || !password) {
       toast({
         title: "Error",
         description: "Please fill in all fields",
@@ -26,27 +25,36 @@ const SignIn = () => {
       });
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
-      // This is a mock authentication - in a real app you would integrate with an auth service
-      // Simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      const res = await fetch(`${API_BASE_URL}/signin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Invalid credentials");
+      }
+
       localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("user", JSON.stringify({ email }));
-      
+      localStorage.setItem("user", JSON.stringify(data.user));
+
       toast({
         title: "Success",
         description: "You have successfully signed in",
       });
-      
+
       navigate("/");
-    } catch (error) {
+      window.location.reload(); // Ensures header updates immediately
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Invalid credentials",
+        description: error.message || "Something went wrong",
         variant: "destructive",
       });
     } finally {
@@ -69,15 +77,15 @@ const SignIn = () => {
         <form onSubmit={handleSignIn}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username">Username</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
-                  id="email"
-                  type="email"
+                  id="username"
+                  type="username"
                   placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={username}
+                  onChange={(e) => setusername(e.target.value)}
                   className="pl-10"
                   disabled={isLoading}
                 />
@@ -97,15 +105,6 @@ const SignIn = () => {
                   disabled={isLoading}
                 />
               </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
-                <Label htmlFor="remember" className="text-sm">Remember me</Label>
-              </div>
-              <Link to="/forgot-password" className="text-sm text-iu-crimson hover:underline">
-                Forgot password?
-              </Link>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
@@ -129,12 +128,6 @@ const SignIn = () => {
                 </span>
               )}
             </Button>
-            <p className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
-              <Link to="/signup" className="font-medium text-iu-crimson hover:underline">
-                Sign up
-              </Link>
-            </p>
           </CardFooter>
         </form>
       </Card>
