@@ -93,7 +93,7 @@ const Header: FC = () => {
             onClick={() => setMenuOpen(!menuOpen)}
           >
             <Menu className="h-6 w-6" />
-          </Button>
+          </Button> 
         </div>
       </div>
 
