@@ -81,11 +81,11 @@ const Index: React.FC = () => {
 
     localStorage.setItem("enrolledCourses", JSON.stringify(newEnrolledCourses));
 
-    toast.success(`Enrolled in ${addedCount} courses`, {
+    toast.success(`Added ${addedCount} courses in your wishlist`, {
       description:
         addedCount > 0
-          ? `You have successfully enrolled in ${addedCount} new courses.`
-          : "No new courses were added as they were already enrolled.",
+          ? `You have successfully added ${addedCount} new courses in your wishlist.`
+          : "Selected courses are already in your wishlist.",
     });
 
     clearCart();
@@ -310,7 +310,7 @@ const Index: React.FC = () => {
                     Details
                   </Button>
                   <Button onClick={() => addToCart(course)} className="w-full">
-                    Add to Cart
+                    Add to Wishlist
                   </Button>
                 </div>
               </div>

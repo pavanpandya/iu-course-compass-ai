@@ -134,7 +134,7 @@ const CourseDetailModal: FC<CourseDetailModalProps> = ({
               <DialogClose asChild>
                 <Button className="border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground">Close</Button>
               </DialogClose>
-              <Button onClick={() => onAddToCart(course)}>Add to Cart</Button>
+              <Button onClick={() => onAddToCart(course)}>Add to Wishlist</Button>
             </div>
           </TabsContent>
 

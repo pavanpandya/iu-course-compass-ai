@@ -72,7 +72,7 @@ const CourseTable: FC<CourseTableProps> = ({
                     className="h-9 px-3 border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
                     onClick={() => onUnenroll(course.id)}
                   >
-                    Unenroll
+                    Remove from Wishlist
                   </Button>
                 )}
               </TableCell>

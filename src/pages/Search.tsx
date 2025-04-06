@@ -134,10 +134,10 @@ const Search: React.FC<SearchProps> = ({ onAddToCart = () => {} }) => {
 
     localStorage.setItem("enrolledCourses", JSON.stringify(newEnrolledCourses));
 
-    toast.success(`Enrolled in ${addedCount} courses`, {
-      description: addedCount > 0
-        ? `You have successfully enrolled in ${addedCount} new courses.`
-        : "No new courses were added as they were already enrolled.",
+    toast.success(`Added ${addedCount} courses in your wishlist`, {
+      description:addedCount > 0
+          ? `You have successfully added ${addedCount} new courses in your wishlist.`
+          : "Selected courses are already in your wishlist.",
     });
 
     clearCart();

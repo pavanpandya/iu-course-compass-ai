@@ -119,7 +119,7 @@ const CartDrawer: FC<CartDrawerProps> = ({
               </div>
 
               <DrawerFooter>
-                <Button onClick={handleEnroll}>Enroll in Courses</Button>
+                <Button onClick={handleEnroll}>Add Courses to Wishlist</Button>
                 <Button
                   className="bg-muted border border-gray-300 text-foreground hover:bg-accent hover:text-accent-foreground"
                   onClick={clearCart}
@@ -147,9 +147,9 @@ const CartDrawer: FC<CartDrawerProps> = ({
                   </Link>
                 </DrawerClose>
                 <DrawerClose asChild>
-                  <Link to="/enrolled-courses">
+                  <Link to="/wishlist-courses">
                     <Button className="border border-input bg-background text-black hover:bg-accent hover:text-accent-foreground">
-                      My Courses
+                      My Wishlist
                     </Button>
                   </Link>
                 </DrawerClose>
