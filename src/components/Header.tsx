@@ -50,7 +50,7 @@ const Header: FC = () => {
           {/* Desktop nav */}
           <nav className="hidden md:flex gap-6 items-center">
             <Link to="/search" className="text-iu-crimson font-bold hover:text-red-700">Course Search</Link>
-            <Link to="/enrolled-courses" className="text-iu-crimson font-bold hover:text-red-700">My Courses</Link>
+            <Link to="/wishlist-courses" className="text-iu-crimson font-bold hover:text-red-700">My Wishlist</Link>
             <Link to="/recommendations" className="text-iu-crimson font-bold hover:text-red-700">Recommendations</Link>
             <Link to="/chatbot" className="text-iu-crimson font-bold hover:text-red-700">AI Assistant</Link>
           </nav>
@@ -102,7 +102,7 @@ const Header: FC = () => {
         <div className="md:hidden bg-white border-t shadow-md p-4 absolute w-full z-40">
           <ul className="space-y-4">
             <li><Link to="/search" onClick={() => setMenuOpen(false)} className="block text-iu-crimson font-bold">Course Search</Link></li>
-            <li><Link to="/enrolled-courses" onClick={() => setMenuOpen(false)} className="block text-iu-crimson font-bold">My Courses</Link></li>
+            <li><Link to="/wishlist-courses" onClick={() => setMenuOpen(false)} className="block text-iu-crimson font-bold">My Wishlist</Link></li>
             <li><Link to="/recommendations" onClick={() => setMenuOpen(false)} className="block text-iu-crimson font-bold">Recommendations</Link></li>
             <li><Link to="/chatbot" onClick={() => setMenuOpen(false)} className="block text-iu-crimson font-bold">AI Assistant</Link></li>
           </ul>

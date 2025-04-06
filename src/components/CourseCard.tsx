@@ -90,7 +90,7 @@ const CourseCard: FC<CourseCardProps> = ({
             className="w-full"
             onClick={() => onAddToCart(course)}
           >
-            Add to Cart
+            Add to Wishlist
           </Button>
         ) : null}
       </CardFooter>

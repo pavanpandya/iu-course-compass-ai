@@ -59,7 +59,7 @@ const EnrolledCourses: React.FC = () => {
     localStorage.setItem("enrolledCourses", JSON.stringify(updatedCourses));
     
     toast.success("Course removed", {
-      description: `${courseToRemove.code} has been removed from your enrolled courses.`,
+      description: `${courseToRemove.code} has been removed from your course wishlist.`,
     });
   };
 
@@ -69,7 +69,7 @@ const EnrolledCourses: React.FC = () => {
       
       <main className="flex-grow container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold">My Enrolled Courses</h1>
+          <h1 className="text-3xl font-bold">Course Wishlist</h1>
           
           <div className="flex items-center gap-4 mt-4 md:mt-0">
             <Select value={selectedTerm} onValueChange={setSelectedTerm}>
@@ -131,9 +131,9 @@ const EnrolledCourses: React.FC = () => {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-bold mb-2">No courses enrolled</h3>
+            <h3 className="text-xl font-bold mb-2">No courses added</h3>
             <p className="text-gray-600 text-center max-w-md mb-4">
-              You haven't enrolled in any courses yet. Go to Course Search to find and enroll in courses.
+              You haven't added any courses yet. Go to Course Search to find and add them to your wishlist.
             </p>
             <Button asChild>
               <a href="/search">Browse Courses</a>
@@ -159,7 +159,7 @@ const EnrolledCourses: React.FC = () => {
                         className="w-full border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
                         onClick={() => handleUnenroll(course.id)}
                       >
-                        Unenroll
+                        Remove from Wishlist
                       </Button>
                     }
                   />
