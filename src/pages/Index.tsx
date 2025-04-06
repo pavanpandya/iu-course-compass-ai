@@ -181,7 +181,8 @@ const Index: React.FC = () => {
                     Tell us your career goals, preferred subjects, and schedule constraints, and we'll recommend the perfect set of courses to help you reach your objectives.
                   </p>
                   <Button asChild>
-                    <Link to="/recommendations">
+                    <Link to="/recommendations"
+                    onClick={() => window.scrollTo({ top: 0, behavior: "auto" })}>
                       <Sparkles className="mr-2 h-4 w-4" /> Get Recommendations
                     </Link>
                   </Button>
