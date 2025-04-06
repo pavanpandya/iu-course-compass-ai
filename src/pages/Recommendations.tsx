@@ -5,7 +5,7 @@ import CourseRecommendationForm from "@/components/CourseRecommendationForm";
 import CourseCard from "@/components/CourseCard";
 import CourseDetailModal from "@/components/CourseDetailModal";
 import CartDrawer from "@/components/CartDrawer";
-import { Course, courses } from "@/data/mockData";
+import { Course } from "@/data/mockData";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
@@ -72,10 +72,7 @@ const Recommendations: React.FC = () => {
                 Share your career ambitions, preferred subjects, and schedule constraints to get personalized course recommendations.
               </p>
               
-              <CourseRecommendationForm 
-                onRecommend={setRecommendedCourses} 
-                courses={courses} 
-              />
+              <CourseRecommendationForm onRecommend={setRecommendedCourses} />
             </div>
           </div>
           
@@ -84,62 +81,60 @@ const Recommendations: React.FC = () => {
               <h2 className="text-xl font-semibold mb-4">Your Recommendations</h2>
               
               {recommendedCourses.length > 0 ? (
-                <>
-                  <Tabs defaultValue="courses">
-                    <TabsList>
-                      <TabsTrigger value="courses">Course List</TabsTrigger>
-                      <TabsTrigger value="career">Career Alignment</TabsTrigger>
-                    </TabsList>
-                    
-                    <TabsContent value="courses" className="mt-4">
-                      <div className="space-y-6">
+                <Tabs defaultValue="courses">
+                  <TabsList>
+                    <TabsTrigger value="courses">Course List</TabsTrigger>
+                    <TabsTrigger value="career">Career Alignment</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="courses" className="mt-4">
+                    <div className="space-y-6">
+                      {recommendedCourses.map(course => (
+                        <CourseCard 
+                          key={course.id} 
+                          course={course} 
+                          onViewDetails={handleViewDetails} 
+                          onAddToCart={addToCart} 
+                        />
+                      ))}
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="career" className="mt-4">
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <h3 className="font-semibold text-lg mb-3">Career Path Progress</h3>
+                      <p className="text-sm text-gray-600 mb-6">
+                        See how these recommended courses align with your selected career path.
+                      </p>
+                      
+                      <div className="space-y-4">
                         {recommendedCourses.map(course => (
-                          <CourseCard 
-                            key={course.id} 
-                            course={course} 
-                            onViewDetails={handleViewDetails} 
-                            onAddToCart={addToCart} 
-                          />
+                          <div key={course.id} className="bg-white p-4 rounded-lg border shadow-sm">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-medium">{course.code}: {course.name}</h4>
+                              <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
+                                High Relevance
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-2">
+                              This course helps develop key skills in {' '}
+                              <span className="font-medium">
+                                {course.department}
+                              </span>
+                              {' '}which is essential for your career path.
+                            </p>
+                            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-green-500" 
+                                style={{ width: `${85 + Math.floor(Math.random() * 16)}%` }}
+                              ></div>
+                            </div>
+                          </div>
                         ))}
                       </div>
-                    </TabsContent>
-                    
-                    <TabsContent value="career" className="mt-4">
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <h3 className="font-semibold text-lg mb-3">Career Path Progress</h3>
-                        <p className="text-sm text-gray-600 mb-6">
-                          See how these recommended courses align with your selected career path.
-                        </p>
-                        
-                        <div className="space-y-4">
-                          {recommendedCourses.map(course => (
-                            <div key={course.id} className="bg-white p-4 rounded-lg border shadow-sm">
-                              <div className="flex items-center justify-between mb-2">
-                                <h4 className="font-medium">{course.code}: {course.name}</h4>
-                                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">
-                                  High Relevance
-                                </span>
-                              </div>
-                              <p className="text-sm text-gray-600 mb-2">
-                                This course helps develop key skills in {' '}
-                                <span className="font-medium">
-                                  {course.department}
-                                </span>
-                                {' '}which is essential for your career path.
-                              </p>
-                              <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                                <div 
-                                  className="h-full bg-green-500" 
-                                  style={{ width: `${85 + Math.floor(Math.random() * 16)}%` }}
-                                ></div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </TabsContent>
-                  </Tabs>
-                </>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               ) : (
                 <div className="flex flex-col items-center justify-center py-12">
                   <div className="bg-gray-100 rounded-full p-4 mb-4">

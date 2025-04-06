@@ -1,8 +1,8 @@
 "use client";
 
 import { FC, useState } from "react";
+import { API_BASE_URL } from "@/config";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,12 +16,10 @@ import { Course, careerPaths } from "@/data/mockData";
 
 interface CourseRecommendationFormProps {
   onRecommend: (courses: Course[]) => void;
-  courses: Course[];
 }
 
-const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({ 
-  onRecommend, 
-  courses 
+const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({
+  onRecommend,
 }) => {
   const [careerGoal, setCareerGoal] = useState("");
   const [preferredSubjects, setPreferredSubjects] = useState("");
@@ -30,65 +28,43 @@ const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDayToggle = (day: string) => {
-    setAvailableDays(prev => {
-      if (prev.includes(day)) {
-        return prev.filter(d => d !== day);
-      } else {
-        return [...prev, day];
-      }
-    });
+    setAvailableDays((prev) =>
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+    );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate API delay
-    setTimeout(() => {
-      // Find career path that matches the selected goal
-      const selectedCareerPath = careerPaths.find(
-        (path) => path.title.toLowerCase() === careerGoal.toLowerCase()
-      );
+    try {
+      const response = await fetch(`${API_BASE_URL}/recommendations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          career_goal: careerGoal,
+          subject: preferredSubjects,
+          enrollment_type: enrollmentType,
+          available_days: availableDays,
+        }),
+      });
 
-      // Get the recommended course codes
-      const recommendedCourseCodes = selectedCareerPath?.recommendedCourses || [];
+      const data = await response.json();
 
-      // Filter courses based on recommended codes
-      let recommendedCourses = courses.filter((course) =>
-        recommendedCourseCodes.includes(course.code)
-      );
-
-      // If preferred subjects are specified, prioritize courses that match
-      if (preferredSubjects) {
-        const subjects = preferredSubjects.toLowerCase().split(",").map(s => s.trim());
-        
-        // Sort recommended courses by how well they match preferred subjects
-        recommendedCourses = recommendedCourses.sort((a, b) => {
-          const aMatches = subjects.filter(subject => 
-            a.name.toLowerCase().includes(subject) || 
-            a.description.toLowerCase().includes(subject)
-          ).length;
-          
-          const bMatches = subjects.filter(subject => 
-            b.name.toLowerCase().includes(subject) || 
-            b.description.toLowerCase().includes(subject)
-          ).length;
-          
-          return bMatches - aMatches;
-        });
+      if (response.ok) {
+        onRecommend(data.recommendations || []);
+      } else {
+        console.error("Error fetching recommendations:", data);
+        onRecommend([]);
       }
+    } catch (error) {
+      console.error("Fetch error:", error);
+      onRecommend([]);
+    }
 
-      // If available days are specified, filter for courses on those days
-      if (availableDays.length > 0) {
-        recommendedCourses = recommendedCourses.filter((course) =>
-          course.schedule.days.some((day) => availableDays.includes(day))
-        );
-      }
-
-      // Return the recommended courses
-      onRecommend(recommendedCourses);
-      setIsLoading(false);
-    }, 1500);
+    setIsLoading(false);
   };
 
   const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -133,7 +109,11 @@ const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({
                 key={day}
                 type="button"
                 variant={isSelected ? "default" : "outline"}
-                className={isSelected ? "flex-1 hover:bg-primary/90" : "flex-1 hover:bg-accent hover:text-accent-foreground"}
+                className={
+                  isSelected
+                    ? "flex-1 hover:bg-primary/90"
+                    : "flex-1 hover:bg-accent hover:text-accent-foreground"
+                }
                 onClick={() => handleDayToggle(day)}
               >
                 {day}
