@@ -17,17 +17,17 @@ const Footer: FC = () => {
             <h4 className="font-semibold text-sm uppercase mb-4">Resources</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="#" className="text-sm opacity-80 hover:opacity-100">
-                  Student Central
+                <Link to="https://studentcentral.indiana.edu/" className="text-sm opacity-80 hover:opacity-100">
+                  Contact Us
                 </Link>
               </li>
               <li>
-                <Link to="#" className="text-sm opacity-80 hover:opacity-100">
-                  Academic Bulletins
+                <Link to="https://studentcentral.indiana.edu/calendar/official-calendar/index.html" className="text-sm opacity-80 hover:opacity-100">
+                  Academic Calendar
                 </Link>
               </li>
               <li>
-                <Link to="#" className="text-sm opacity-80 hover:opacity-100">
+                <Link to="https://registrar.indiana.edu/" className="text-sm opacity-80 hover:opacity-100">
                   Office of Registrar
                 </Link>
               </li>
@@ -38,17 +38,17 @@ const Footer: FC = () => {
             <h4 className="font-semibold text-sm uppercase mb-4">Support</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="#" className="text-sm opacity-80 hover:opacity-100">
+                <Link to="https://studentcentral.indiana.edu/" className="text-sm opacity-80 hover:opacity-100">
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link to="#" className="text-sm opacity-80 hover:opacity-100">
+                <Link to="https://uits.iu.edu/" className="text-sm opacity-80 hover:opacity-100">
                   Contact UITS
                 </Link>
               </li>
               <li>
-                <Link to="#" className="text-sm opacity-80 hover:opacity-100">
+                <Link to="https://accessibility.iu.edu/assistance/index.html?_gl=1*1h39ndz*_ga*NTQ4MzY2MTI2LjE3MzcxODExNTc.*_ga_61CH0D2DQW*MTc0MzkwNzAxMS4xNC4xLjE3NDM5MDcwMjAuNTEuMC4w*_gcl_au*MjE0NTQ5NDcyNS4xNzM4NzgwODg1" className="text-sm opacity-80 hover:opacity-100">
                   Accessibility
                 </Link>
               </li>
@@ -59,17 +59,17 @@ const Footer: FC = () => {
             <h4 className="font-semibold text-sm uppercase mb-4">Legal</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="#" className="text-sm opacity-80 hover:opacity-100">
+                <Link to="https://studentcentral.indiana.edu/privacy/" className="text-sm opacity-80 hover:opacity-100">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="#" className="text-sm opacity-80 hover:opacity-100">
+                <Link to="https://policies.iu.edu/?_gl=1*1fjyqex*_ga*NTQ4MzY2MTI2LjE3MzcxODExNTc.*_ga_61CH0D2DQW*MTc0MzkwNjU5My4yNS4xLjE3NDM5MDcyMDMuMzQuMC4w*_gcl_au*MjE0NTQ5NDcyNS4xNzM4NzgwODg1*_ga_SHT4W9QCV3*MTc0MzkwNjYxMS4yLjEuMTc0MzkwNzE5OC4zOS4wLjQ1Njk3MzE1NQ.." className="text-sm opacity-80 hover:opacity-100">
                   Terms of Use
                 </Link>
               </li>
               <li>
-                <Link to="#" className="text-sm opacity-80 hover:opacity-100">
+                <Link to="https://accessibility.iu.edu/assistance/index.html?_gl=1*1h39ndz*_ga*NTQ4MzY2MTI2LjE3MzcxODExNTc.*_ga_61CH0D2DQW*MTc0MzkwNzAxMS4xNC4xLjE3NDM5MDcwMjAuNTEuMC4w*_gcl_au*MjE0NTQ5NDcyNS4xNzM4NzgwODg1" className="text-sm opacity-80 hover:opacity-100">
                   Accessibility Statement
                 </Link>
               </li>
