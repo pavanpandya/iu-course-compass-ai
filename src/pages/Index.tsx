@@ -6,102 +6,122 @@ import { Search, Sparkles, MessageCircle, BookOpen } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
-import { Course, courses } from "@/data/mockData";
+import { Course } from "@/data/mockData";
 import { toast } from "sonner";
 import CourseDetailModal from "@/components/CourseDetailModal";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+
 const Index: React.FC = () => {
-  const [cartItems, setCartItems] = useState<Course[]>([]);
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const [cartItems, setCartItems] = useState<Course[]>([]);
+const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+const [isModalOpen, setIsModalOpen] = useState(false);
+const [featuredCourses, setFeaturedCourses] = useState<Course[]>([]);
+const [isLoading, setIsLoading] = useState(false);
+const [error, setError] = useState<string | null>(null);
 
-  // Load cart items from localStorage on component mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cartItems");
-    if (savedCart) {
-      try {
-        setCartItems(JSON.parse(savedCart));
-      } catch (error) {
-        console.error("Failed to parse cart items:", error);
-      }
+useEffect(() => {
+  const savedCart = localStorage.getItem("cartItems");
+  if (savedCart) {
+    try {
+      setCartItems(JSON.parse(savedCart));
+    } catch (error) {
+      console.error("Failed to parse cart items:", error);
     }
-  }, []);
+  }
+}, []);
 
-  // Save cart items to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+useEffect(() => {
+  localStorage.setItem("cartItems", JSON.stringify(cartItems));
+}, [cartItems]);
 
-  const addToCart = (course: Course) => {
-    if (cartItems.some((item) => item.id === course.id)) {
-      toast.error("Already in cart", {
-        description: `${course.code} is already in your cart.`,
-      });
-      return;
-    }
-    setCartItems([...cartItems, course]);
-    toast.success("Added to cart", {
-      description: `${course.code} has been added to your cart.`,
-    });
-  };
-
-  const removeFromCart = (course: Course) => {
-    setCartItems(cartItems.filter((item) => item.id !== course.id));
-    toast.info("Removed from cart", {
-      description: `${course.code} has been removed from your cart.`,
-    });
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-    localStorage.removeItem("cartItems");
-  };
-
-  const handleEnroll = () => {
-    const savedCourses = localStorage.getItem("enrolledCourses");
-    let enrolledCourses: Course[] = [];
-
-    if (savedCourses) {
-      try {
-        enrolledCourses = JSON.parse(savedCourses);
-      } catch (error) {
-        console.error("Failed to parse enrolled courses:", error);
+useEffect(() => {
+  const fetchFeaturedCourses = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/course_rec`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch featured courses");
       }
+      const data = await response.json();
+      setFeaturedCourses(data.recommendations.courses);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setIsLoading(false);
     }
+  };
 
-    const newEnrolledCourses = [...enrolledCourses];
-    let addedCount = 0;
+  fetchFeaturedCourses();
+}, []);
 
-    cartItems.forEach((course) => {
-      if (!enrolledCourses.some((enrolled) => enrolled.id === course.id)) {
-        newEnrolledCourses.push(course);
-        addedCount++;
-      }
+const addToCart = (course: Course) => {
+  if (cartItems.some((item) => item.id === course.id)) {
+    toast.error("Already in cart", {
+      description: `${course.code} is already in your cart.`,
     });
+    return;
+  }
+  setCartItems([...cartItems, course]);
+  toast.success("Added to cart", {
+    description: `${course.code} has been added to your cart.`,
+  });
+};
 
-    localStorage.setItem("enrolledCourses", JSON.stringify(newEnrolledCourses));
+const removeFromCart = (course: Course) => {
+  setCartItems(cartItems.filter((item) => item.id !== course.id));
+  toast.info("Removed from cart", {
+    description: `${course.code} has been removed from your cart.`,
+  });
+};
 
-    toast.success(`Added ${addedCount} courses in your wishlist`, {
-      description:
-        addedCount > 0
-          ? `You have successfully added ${addedCount} new courses in your wishlist.`
-          : "Selected courses are already in your wishlist.",
-    });
+const clearCart = () => {
+  setCartItems([]);
+  localStorage.removeItem("cartItems");
+};
 
-    clearCart();
-  };
+const handleEnroll = () => {
+  const savedCourses = localStorage.getItem("enrolledCourses");
+  let enrolledCourses: Course[] = [];
 
-  const handleViewDetails = (course: Course) => {
-    setSelectedCourse(course);
-    setIsModalOpen(true);
-  };
+  if (savedCourses) {
+    try {
+      enrolledCourses = JSON.parse(savedCourses);
+    } catch (error) {
+      console.error("Failed to parse enrolled courses:", error);
+    }
+  }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const newEnrolledCourses = [...enrolledCourses];
+  let addedCount = 0;
 
-  const featuredCourses = courses.slice(0, 3);
+  cartItems.forEach((course) => {
+    if (!enrolledCourses.some((enrolled) => enrolled.id === course.id)) {
+      newEnrolledCourses.push(course);
+      addedCount++;
+    }
+  });
 
+  localStorage.setItem("enrolledCourses", JSON.stringify(newEnrolledCourses));
+
+  toast.success(`Added ${addedCount} courses in your wishlist`, {
+    description:
+      addedCount > 0
+        ? `You have successfully added ${addedCount} new courses in your wishlist.`
+        : "Selected courses are already in your wishlist.",
+  });
+
+  clearCart();
+};
+
+const handleViewDetails = (course: Course) => {
+  setSelectedCourse(course);
+  setIsModalOpen(true);
+};
+
+const handleCloseModal = () => {
+  setIsModalOpen(false);
+};
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -291,37 +311,43 @@ const Index: React.FC = () => {
         <div className="container mx-auto max-w-5xl">
           <h2 className="text-3xl font-bold text-center mb-4">Featured Courses</h2>
           <p className="text-center text-gray-600 mb-12">Explore some of our most popular courses this term</p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredCourses.map(course => (
-              <div key={course.id} className="border rounded-lg shadow-md overflow-hidden bg-white">
-                <div className="p-4 border-b h-32 flex flex-col justify-center">
-                  <p className="text-sm text-gray-500">{course.code}</p>
-                  <h3 className="font-bold text-lg line-clamp-2 min-h-[3rem]">{course.name}</h3>
+
+          {isLoading ? (
+            <p className="text-center text-gray-500">Loading...</p>
+          ) : error ? (
+            <p className="text-center text-red-500">{error}</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {featuredCourses.map((course) => (
+                <div key={course.id} className="border rounded-lg shadow-md overflow-hidden bg-white">
+                  <div className="p-4 border-b h-32 flex flex-col justify-center">
+                    <p className="text-sm text-gray-500">{course.code}</p>
+                    <h3 className="font-bold text-lg line-clamp-2 min-h-[3rem]">{course.name}</h3>
+                  </div>
+                  <div className="p-4 space-y-2">
+                    <p className="text-sm"><span className="font-medium">Professor:</span> {course.professor.name}</p>
+                    <p className="text-sm"><span className="font-medium">Credits:</span> {course.credits}</p>
+                    <p className="text-sm"><span className="font-medium">Term:</span> {course.term} {course.year}</p>
+                    <p className="text-sm"><span className="font-medium">Rating:</span> {course.ocq.overall.toFixed(1)}/5.0</p>
+                  </div>
+                  <div className="p-4 flex items-center justify-between gap-2 border-t bg-gray-50">
+                    <Button onClick={() => handleViewDetails(course)} className="w-full">
+                      Details
+                    </Button>
+                    <Button onClick={() => addToCart(course)} className="w-full">
+                      Add to Wishlist
+                    </Button>
+                  </div>
                 </div>
-                <div className="p-4 space-y-2">
-                  <p className="text-sm"><span className="font-medium">Professor:</span> {course.professor.name}</p>
-                  <p className="text-sm"><span className="font-medium">Credits:</span> {course.credits}</p>
-                  <p className="text-sm"><span className="font-medium">Term:</span> {course.term} {course.year}</p>
-                  <p className="text-sm"><span className="font-medium">Rating:</span> {course.ocq.overall.toFixed(1)}/5.0</p>
-                </div>
-                <div className="p-4 flex items-center justify-between gap-2 border-t bg-gray-50">
-                  <Button onClick={() => handleViewDetails(course)} className="w-full">
-                    Details
-                  </Button>
-                  <Button onClick={() => addToCart(course)} className="w-full">
-                    Add to Wishlist
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-            <div className="text-center mt-8">
+              ))}
+            </div>
+          )}
+
+          <div className="text-center mt-8">
             <Button asChild className="bg-white text-iu-crimson border border-iu-crimson hover:bg-red-900/10 h-11 px-8">
               <Link to="/search">View All Courses</Link>
             </Button>
-            </div>
+          </div>
         </div>
       </section>
       
