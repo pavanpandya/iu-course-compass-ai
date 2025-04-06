@@ -57,14 +57,25 @@ const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onSearch }) => {
 
     if (searchTerm) {
       const lowerCaseSearch = searchTerm.toLowerCase();
-      result = result.filter(
-        (course) =>
-          course.name.toLowerCase().includes(lowerCaseSearch) ||
-          course.code.toLowerCase().includes(lowerCaseSearch) ||
-          course.description.toLowerCase().includes(lowerCaseSearch) ||
-          course.professor.name.toLowerCase().includes(lowerCaseSearch)
-      );
-    }
+      result = result.filter((course, index) => {
+        try {
+          const name = course.name?.toLowerCase() ?? "";
+          const code = course.code?.toLowerCase() ?? "";
+          const description = course.description?.toLowerCase() ?? "";
+          const professor = course.professor?.name?.toLowerCase() ?? "";
+    
+          return (
+            name.includes(lowerCaseSearch) ||
+            code.includes(lowerCaseSearch) ||
+            description.includes(lowerCaseSearch) ||
+            professor.includes(lowerCaseSearch)
+          );
+        } catch (err) {
+          console.error(`Error filtering course at index ${index}:`, course, err);
+          return false;
+        }
+      });
+    }    
 
     if (term !== "all") {
       result = result.filter((course) => course.term === term);
