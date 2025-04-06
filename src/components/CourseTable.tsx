@@ -51,7 +51,9 @@ const CourseTable: FC<CourseTableProps> = ({
               </TableCell>
               <TableCell>{course.credits}</TableCell>
               <TableCell>
-                <Badge className={course.mode === "Online" ? "border border-input bg-background" : "bg-primary text-primary-foreground"}>
+                <Badge className={course.mode === "Online" 
+                  ? "border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground" 
+                  : "bg-[#900] text-white"}>
                   {course.mode}
                 </Badge>
               </TableCell>
@@ -59,7 +61,7 @@ const CourseTable: FC<CourseTableProps> = ({
               <TableCell className="text-right">
                 {addToCartButton ? (
                   <Button
-                    className="h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+                    className="h-9 px-3 border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
                     onClick={() => onAddToCart(course.id)}
                   >
                     <ShoppingCart className="h-3.5 w-3.5 mr-1" />
@@ -67,7 +69,7 @@ const CourseTable: FC<CourseTableProps> = ({
                   </Button>
                 ) : (
                   <Button
-                    className="h-9 px-3 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+                    className="h-9 px-3 border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground"
                     onClick={() => onUnenroll(course.id)}
                   >
                     Unenroll

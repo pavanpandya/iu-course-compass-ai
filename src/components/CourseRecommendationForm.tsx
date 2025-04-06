@@ -126,16 +126,20 @@ const CourseRecommendationForm: React.FC<CourseRecommendationFormProps> = ({
       <div className="space-y-2">
         <Label>Available Days</Label>
         <div className="flex flex-wrap gap-2">
-          {daysOfWeek.map((day) => (
-            <Button
-              key={day}
-              type="button"
-              className={`flex-1 ${availableDays.includes(day) ? "bg-primary text-primary-foreground hover:bg-primary/90" : "border border-input bg-background hover:bg-accent hover:text-accent-foreground"}`}
-              onClick={() => handleDayToggle(day)}
-            >
-              {day}
-            </Button>
-          ))}
+          {daysOfWeek.map((day) => {
+            const isSelected = availableDays.includes(day);
+            return (
+              <Button
+                key={day}
+                type="button"
+                variant={isSelected ? "default" : "outline"}
+                className={isSelected ? "flex-1 hover:bg-primary/90" : "flex-1 hover:bg-accent hover:text-accent-foreground"}
+                onClick={() => handleDayToggle(day)}
+              >
+                {day}
+              </Button>
+            );
+          })}
         </div>
       </div>
 

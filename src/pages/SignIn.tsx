@@ -31,8 +31,8 @@ const SignIn = () => {
     try {
       const res = await fetch(`${API_BASE_URL}/signin`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ username, password }).toString(),
       });
 
       const data = await res.json();

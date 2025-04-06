@@ -35,24 +35,19 @@ const CourseDetailModal: FC<CourseDetailModalProps> = ({
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <div className="flex items-start justify-between">
+          <p className="text-sm text-muted-foreground font-medium">{course.code}</p>
+          <div className="flex justify-between items-start">
             <div>
-              <p className="text-sm text-muted-foreground font-medium">{course.code}</p>
               <DialogTitle className="text-2xl font-bold">{course.name}</DialogTitle>
               <DialogDescription className="mt-1">
                 {course.term} {course.year} • {course.credits} {course.credits === 1 ? "credit" : "credits"}
               </DialogDescription>
             </div>
-            <div className="flex items-center space-x-2">
-              <Badge className={course.mode === "Online" ? "border border-input bg-background" : "bg-primary text-primary-foreground"}>
-                {course.mode}
-              </Badge>
-              <DialogClose asChild>
-                <Button className="h-10 w-10 p-0 hover:bg-accent hover:text-accent-foreground">
-                  <X className="h-4 w-4" />
-                </Button>
-              </DialogClose>
-            </div>
+            <Badge className={course.mode === "Online" 
+              ? "border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground" 
+              : "bg-[#900] text-white"}>
+              {course.mode}
+            </Badge>
           </div>
         </DialogHeader>
 
@@ -137,7 +132,7 @@ const CourseDetailModal: FC<CourseDetailModalProps> = ({
 
             <div className="flex justify-end space-x-2 mt-4 pt-4 border-t">
               <DialogClose asChild>
-                <Button className="border border-input bg-background hover:bg-accent hover:text-accent-foreground">Close</Button>
+                <Button className="border border-input bg-background text-foreground hover:bg-accent hover:text-accent-foreground">Close</Button>
               </DialogClose>
               <Button onClick={() => onAddToCart(course)}>Add to Cart</Button>
             </div>
